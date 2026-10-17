@@ -1,0 +1,12 @@
+# Local Python environments
+.venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# macOS metadata
+.DS_Store
+
+# Generated socket output
+Socket/output.bmp

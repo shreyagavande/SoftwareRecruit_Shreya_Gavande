@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Photo Studio</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <!-- Navigation switches between saved collections without leaving the page. -->
+    <nav class="topbar" aria-label="Main navigation">
+      <a class="studio-brand" href="#" id="brand-link"
+        >Photo Studio<span>by Shreya</span></a
+      >
+      <div class="nav-links">
+        <button id="nav-library" type="button" aria-current="page">
+          Library
+        </button>
+        <button id="nav-unlabeled" type="button">Unlabeled</button>
+        <button id="nav-archive" type="button">Archive</button>
+        <button id="guide-button" type="button" aria-haspopup="dialog">
+          Guide
+        </button>
+        <button id="settings-button" type="button">Settings</button>
+      </div>
+      <button id="theme-toggle" type="button" class="soft-button">
+        Dark mode
+      </button>
+    </nav>
+
+    <header class="studio-header">
+      <div>
+        <p class="eyebrow">Shreya · Photography</p>
+        <h1>My Photo Studio</h1>
+        <p class="subtitle">
+          A space for the places, moments, and moods you capture.
+        </p>
+      </div>
+      <p id="connection-status" role="status">Connecting…</p>
+    </header>
+
+    <main>
+      <section class="toolbar" aria-label="Photo library controls">
+        <div class="search-field">
+          <label for="search-input">Search photos</label>
+          <input
+            id="search-input"
+            type="search"
+            placeholder="Search by name or tag"
+          />
+        </div>
+        <div class="folder-filter-field">
+          <label for="folder-filter">Folder</label>
+          <select id="folder-filter">
+            <option value="">All folders</option>
+          </select>
+        </div>
+        <label class="filter-control"
+          ><input id="unlabeled-filter" type="checkbox" /> Unlabeled only</label
+        >
+        <button
+          id="receive-button"
+          type="button"
+          class="primary-button"
+          disabled
+        >
+          + Generate random photo
+        </button>
+        <!-- Clears the saved demo and starts the sample collection again -->
+        <button id="restart-button" type="button" class="soft-button">
+          Restart demo
+        </button>
+      </section>
+      <!-- Shows how many of the ten sample photos are saved -->
+      <p id="sample-progress" class="feedback" role="status" aria-live="polite">
+        Checking sample collection…
+      </p>
+      <div class="library-summary">
+        <h2 id="view-heading">Library</h2>
+        <!-- JavaScript updates only the numbers inside these spans -->
+        <p class="library-counts">
+          <span id="total-count">0</span> photos ·
+          <span id="unlabeled-count">0</span> unlabeled
+        </p>
+      </div>
+      <p id="feedback" class="feedback" role="status" aria-live="polite">
+        Opening your library…
+      </p>
+      <section
+        id="photo-grid"
+        class="photo-grid"
+        aria-label="Photo library"
+      ></section>
+      <p id="empty-message" hidden>
+        No photos yet. Receive a photo to get started.
+      </p>
+    </main>
+
+    <!-- One large photo on the left, with all editing controls on the right. -->
+    <dialog id="edit-dialog" aria-labelledby="edit-heading">
+      <div class="viewer-top">
+        <h2 id="edit-heading">Photo details</h2>
+        <button
+          id="close-editor"
+          type="button"
+          class="quiet-button"
+          aria-label="Close photo details"
+        >
+          Close ×
+        </button>
+      </div>
+      <div class="viewer-shell">
+        <div class="photo-stage">
+          <img id="edit-preview" alt="Selected photograph" />
+        </div>
+        <aside class="editor-sidebar" aria-label="Photo editing controls">
+          <p id="photo-state" class="eyebrow">In your library</p>
+          <form id="edit-form">
+            <label for="edit-name">Photo name</label>
+            <input id="edit-name" type="text" required maxlength="180" />
+            <label for="edit-tags">Tags</label>
+            <input
+              id="edit-tags"
+              type="text"
+              placeholder="Toronto, architecture, nostalgic"
+            />
+            <p class="field-hint">
+              Separate tags with commas. No tags means unlabeled.
+            </p>
+            <fieldset class="tag-colors">
+              <legend>Tag colours</legend>
+              <div id="tag-color-list"></div>
+            </fieldset>
+            <label for="edit-folder">Folder</label>
+            <input
+              id="edit-folder"
+              type="text"
+              list="folder-options"
+              maxlength="80"
+              placeholder="Choose or create a folder"
+            />
+            <datalist id="folder-options"></datalist>
+            <p class="field-hint">
+              Folders organize your saved library. Original files stay in place.
+            </p>
+            <p id="editor-feedback" role="status" aria-live="polite"></p>
+            <div class="edit-actions">
+              <button id="save-button" type="submit" class="primary-button">
+                Save changes
+              </button>
+              <button id="cancel-button" type="button" class="soft-button">
+                Cancel
+              </button>
+            </div>
+          </form>
+          <div class="manage-actions">
+            <button id="archive-button" type="button" class="soft-button">
+              Archive photo
+            </button>
+            <button id="delete-button" type="button" class="danger-button">
+              Delete photo
+            </button>
+          </div>
+        </aside>
+      </div>
+    </dialog>
+
+    <!-- Guide opens from navigation and explains the actual application controls. -->
+    <dialog id="guide-dialog" aria-labelledby="guide-heading">
+      <div class="viewer-top">
+        <div>
+          <p class="eyebrow">A little guidance</p>
+          <h2 id="guide-heading">Your photos, beautifully organized.</h2>
+        </div>
+        <form method="dialog">
+          <button class="quiet-button" aria-label="Close guide">Close ×</button>
+        </form>
+      </div>
+      <div class="guide-body">
+        <p class="guide-intro">
+          From a random discovery to a collection that feels like you.
+        </p>
+        <aside class="sample-note">
+          <strong>A small collection, made for this demo.</strong>
+          <p>
+            This sample application contains only
+            <strong>10 photographs</strong>. Generate random photo selects one
+            from that collection; it does not create new images or pull from an
+            unlimited feed. Once all 10 have been sent, there are no more sample
+            photos to receive in that run.
+          </p>
+        </aside>
+        <ol class="guide-steps">
+          <li>
+            <h3>Generate a random photo</h3>
+            <p>
+              When the status says Connected, click
+              <strong>+ Generate random photo</strong>. A photograph arrives
+              from the sample collection and is automatically saved with the
+              <strong>unlabeled</strong> tag.
+            </p>
+          </li>
+          <li>
+            <h3>Open it up</h3>
+            <p>
+              Click any photo in the gallery. A large preview opens on the left,
+              with all your editing controls in the sidebar on the right. On a
+              smaller screen, the controls appear below the photo.
+            </p>
+          </li>
+          <li>
+            <h3>Give it a name and tags</h3>
+            <p>
+              Change the photo name and enter tags separated by commas, such as
+              <strong>Toronto, sunset, architecture</strong>. Choose a colour
+              for each tag, then click <strong>Save changes</strong>. Here,
+              editing means organizing the name and details; it does not change
+              the image pixels.
+            </p>
+          </li>
+          <li>
+            <h3>Make a collection</h3>
+            <p>
+              In the sidebar’s <strong>Folder</strong> field, type a new folder
+              name or choose an existing one, then save. Use the Folder filter
+              above the gallery to browse that collection.
+            </p>
+          </li>
+          <li>
+            <h3>Find it again</h3>
+            <p>
+              Search by photo name or tag using the search bar. Use
+              <strong>Unlabeled</strong> to find photos that still need tags;
+              the count shows how many remain in the current view. Click a
+              result to reopen it and make more changes.
+            </p>
+          </li>
+          <li>
+            <h3>Keep, archive, or delete</h3>
+            <p>
+              <strong>Archive photo</strong> moves it out of your Library. Find
+              it in <strong>Archive</strong> and choose
+              <strong>Restore to library</strong> to bring it back.
+              <strong>Delete photo</strong> removes the saved entry after
+              confirmation. Your original image file is not deleted.
+            </p>
+          </li>
+        </ol>
+        <div class="guide-footer">
+          <h3>Make yourself at home</h3>
+          <p>
+            Switch between light and dark mode using the top-right button or
+            <strong>Settings</strong>. Your photos and saved edits stay in this
+            browser on this device. Return using the same browser and website
+            address.
+          </p>
+        </div>
+        <form method="dialog">
+          <button class="primary-button">Got it — explore my library</button>
+        </form>
+      </div>
+    </dialog>
+
+    <dialog id="settings-dialog" aria-labelledby="settings-heading">
+      <h2 id="settings-heading">Settings</h2>
+      <label for="theme-select">Appearance</label>
+      <select id="theme-select">
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+      <p>
+        Your library is saved in this browser on this device. Use the same
+        browser and address when returning.
+      </p>
+      <form method="dialog">
+        <button type="submit" class="primary-button">Done</button>
+      </form>
+    </dialog>
+  </body>
+</html>
