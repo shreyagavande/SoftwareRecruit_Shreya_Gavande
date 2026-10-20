@@ -291,7 +291,3 @@ Check that you are using the same browser profile and exact address. `localhost`
 **Shreya Gavande**
 
 Created for the TMR software recruitment application, with a focus on Web Team UI Development.
-
-## GitHub Repository
-
-https://github.com/shreyagavande/SoftwareRecruit_Shreya_Gavande
