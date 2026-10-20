@@ -2,6 +2,10 @@
 
 This repository contains two projects completed for the TMR software recruitment application:
 
+## GitHub Repository
+
+https://github.com/shreyagavande/SoftwareRecruit_Shreya_Gavande
+
 1. **TCP Image Transfer:** sends an image from a simulated rover to a base station.
 2. **Photo Studio:** a photography library built for the Web Team UI Development task.
 
